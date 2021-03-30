@@ -1,10 +1,10 @@
 package controllers
 
 import (
+	"airplaneServer/internal/app/airplaneServer/constants"
 	"airplaneServer/pkg/logger"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	// "time"
 )
 
 func NewHomeController() *HomeController {
@@ -15,10 +15,17 @@ type HomeController struct {
 	BaseController
 }
 
-func (controller HomeController) Ping(context *gin.Context) {
-	// time.Sleep(2 * time.Second)
+func (h HomeController) Ping(c *gin.Context) {
 	logger.Info("ping~~~", logger.DEFAULT)
-	context.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"message": "pong",
 	})
+}
+
+func (h HomeController) RegOrLogin(c *gin.Context) {
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+	logger.Info(username, logger.DEFAULT)
+	logger.Info(password, logger.DEFAULT)
+	c.JSON(http.StatusOK, h.MakeResponse(constants.ResCodeSuccess, "RegDone", h.EmptyData()))
 }
