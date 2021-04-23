@@ -21,5 +21,6 @@ type Router struct {
 func (r *Router) Setting(server *gin.Engine) {
 	// ping
 	server.GET("ping", r.HomeController.Ping)
-	server.POST("reg-or-login", middlewares.Check2, r.HomeController.RegOrLogin)
+	server.POST("reg-or-login", r.HomeController.RegOrLogin)
+	server.POST("score", middlewares.Check, r.HomeController.RegOrLogin)
 }

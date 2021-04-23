@@ -3,10 +3,10 @@ package provider
 import (
 	"airplaneServer/internal/app/airplaneServer/controllers"
 	"airplaneServer/internal/app/airplaneServer/database/mysql"
-	// "airplaneServer/internal/app/airplaneServer/models"
-	// "airplaneServer/internal/app/airplaneServer/repositories"
+	"airplaneServer/internal/app/airplaneServer/models"
+	"airplaneServer/internal/app/airplaneServer/repositories"
 	"airplaneServer/internal/app/airplaneServer/routes"
-	// "airplaneServer/internal/app/airplaneServer/services"
+	"airplaneServer/internal/app/airplaneServer/services"
 	"go.uber.org/dig"
 )
 
@@ -18,10 +18,13 @@ var serviceList = []interface{}{
 	controllers.NewHomeController,
 
 	// 服務
+	services.NewUserService,
 
 	// 資料組合
+	repositories.NewUserRepo,
 
 	// 模型
+	models.NewUser,
 
 	// 底層基本
 	routes.NewRouter,

@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"context"
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"os"
@@ -8,6 +9,7 @@ import (
 )
 
 var redisClient *redis.Client
+var Ctx = context.Background()
 
 func GetRedisClient() *redis.Client {
 	if redisClient != nil {
