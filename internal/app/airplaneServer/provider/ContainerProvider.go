@@ -22,9 +22,11 @@ var serviceList = []interface{}{
 
 	// 資料組合
 	repositories.NewUserRepo,
+	repositories.NewScoreRepo,
 
 	// 模型
 	models.NewUser,
+	models.NewScore,
 
 	// 底層基本
 	routes.NewRouter,

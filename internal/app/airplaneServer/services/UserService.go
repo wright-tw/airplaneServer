@@ -4,17 +4,23 @@ import (
 	"airplaneServer/internal/app/airplaneServer/database/redis"
 	"airplaneServer/internal/app/airplaneServer/repositories"
 	"airplaneServer/pkg/hash"
+	// "airplaneServer/pkg/logger"
 	"errors"
 	"github.com/jinzhu/gorm"
+	"strconv"
 	"time"
 )
 
-func NewUserService(UserRepo *repositories.UserRepo) *UserService {
-	return &UserService{UserRepo: UserRepo}
+func NewUserService(UserRepo *repositories.UserRepo, ScoreRepo *repositories.ScoreRepo) *UserService {
+	return &UserService{
+		UserRepo:  UserRepo,
+		ScoreRepo: ScoreRepo,
+	}
 }
 
 type UserService struct {
-	UserRepo repositories.IUserRepo
+	UserRepo  repositories.IUserRepo
+	ScoreRepo repositories.IScoreRepo
 }
 
 func (u *UserService) RegOrLogin(username string, password string) (string, error) {
@@ -55,5 +61,30 @@ func (u *UserService) RegOrLogin(username string, password string) (string, erro
 
 	// create token
 	return token, nil
+}
+
+func (u *UserService) WriteScore(token string, score int64) error {
+	// check token
+	client := redis.GetRedisClient()
+	userIDString, err := client.Get(redis.Ctx, token).Result()
+	if err != nil && err.Error() != "redis: nil" {
+		return err
+	}
+	if userIDString == "" {
+		return errors.New("token error")
+	}
+
+	userID, err2 := strconv.ParseInt(userIDString, 10, 64)
+	if err2 != nil {
+		return err2
+	}
+
+	// write score
+	err3 := u.ScoreRepo.Create(userID, score)
+	if err3 != nil {
+		return err3
+	}
+
+	return nil
 
 }

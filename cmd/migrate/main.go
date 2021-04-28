@@ -12,5 +12,6 @@ func main() {
 	db.Connect.AutoMigrate(
 		// 把需要建立表的模型全部丟進來
 		&models.User{},
+		&models.Score{},
 	)
 }
